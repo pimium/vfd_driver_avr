@@ -13,53 +13,22 @@
 //              ------
 // ----------------------------------------------------------------------------
 
-#define MAX_PWM 0x10
-
-ISR(TIM0_OVF_vect)
-{
-
-  PORTB &= ~(1 << PB0); // High Voltage
-}
+#define MAX_PWM 0x28
 
 static inline void initTimer0(void)
 {
   // Timer 0 Configuration
   TCCR0B |= (0 << CS02) | (0 << CS01) | (1 << CS00)  // Prescaler = 1
            | (1 << WGM02); //Fast PWM
-//  TCCR0A |= ((1 << COM0B1) | (0 << COM0B0) // Clear PORT OC0B on OCR0B match
-//            | (1 << COM0A1) | (0 << COM0A0) // Clear PORT OC0A on OCR0A match
-//            | (1 << WGM00) | (1 << WGM01));
+
+  TCCR0A |= (0 << COM0A1) | (0 << COM0A0); // Clear PORT OC0A on Top
+  TCCR0A |= (1 << COM0B1) | (0 << COM0B0);
 
   // Set to 'Fast PWM' mode
   TCCR0A |= (1 << WGM01) | (1 << WGM00);
-  TIMSK0 |= (1 << TOIE0);
 
-// Clear OC0B output on compare match, upwards counting.
-  TCCR0A |= (1 << COM0B1);
   OCR0B = MAX_PWM/4+MAX_PWM/8;  // Filament setting
   OCR0A = MAX_PWM;
-}
-
-void adc_setup (void)
-{
-    // Set the ADC input to PB2/ADC1
-    ADMUX |= (1 << MUX0);
-    ADMUX |= (1 << ADLAR);
-
-    // Set the prescaler to clock/128 & enable ADC
-    ADCSRA |= (1 << ADPS1) | (1 << ADPS0) | (1 << ADEN);
-}
-
-
-int adc_read (void)
-{
-    // Start the conversion
-    ADCSRA |= (1 << ADSC);
-
-    // Wait for it to finish - blocking
-    while (ADCSRA & (1 << ADSC));
-
-    return ADCH;
 }
 
 int main(void)
@@ -70,8 +39,6 @@ int main(void)
   DDRB |= (1 << PB0) | (1 << PB1);
 
   initTimer0();
-  adc_setup();
-
 
   sei();
 
@@ -79,9 +46,18 @@ int main(void)
 
   while (1)
   {
-      PORTB |= (1 << PB0);  // High voltage.
-      
-      // OCR0B = adc_read(); //MAX_PWM/4+MAX_PWM/8;  // Filament setting
+      PORTB &= ~(1 << PB0);  // High voltage
+      PORTB &= ~(1 << PB0);  // High voltage
+//      PORTB &= ~(1 << PB0);  // High voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
+      PORTB |= (1 << PB0); // High Voltage
   }
 
   return 0;
