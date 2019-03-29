@@ -4,6 +4,12 @@
 #include <stdint.h>
 //#include "pid.h"
 
+#define RCLK PB2
+#define DATA PB0
+#define SRCLK PB1
+#define SRCLR PB4
+#define GRAD PB3
+
 // ----------------------------------------------------------------------------
 //              ------
 //ADC0/RES    -| -    |-  VCC
@@ -31,60 +37,37 @@ static inline void initTimer0(void)
   OCR0A = MAX_PWM;
 }
 
-//void adc_setup (void)
-//{
-//    // Set the ADC input to PB2/ADC1
-//    ADMUX |= (1 << MUX0);
-//    ADMUX |= (1 << ADLAR);
-//
-//    // Set the prescaler to clock/128 & enable ADC
-//    ADCSRA |= (1 << ADPS1) | (1 << ADPS0) | (1 << ADEN);
-//    OCR0B = MAX_PWM/2;
-//    OCR0A = MAX_PWM;
-//}
-//
-//int adc_read (void)
-//{
-//    // Start the conversion
-//    ADCSRA |= (1 << ADSC);
-//
-//    // Wait for it to finish
-//    while (ADCSRA & (1 << ADSC));
-//
-//    return ADCH;
-//}
-
 int main(void)
 {
 
   // ---- Initialization ----
 
-  DDRB |= (1 << PB0) | (1 << PB1);
+  DDRB |= (1 << RCLK) | (1 << DATA) | (1 << SRCLK) | (1 << SRCLR) | (1 << GRAD);
 
-  initTimer0();
-//  adc_setup();
-
-  sei();
+//  initTimer0();
+//  sei();
 
   // ---- Main Loop ----
-//  int adc_value;
-
+    PORTB &= ~(1 << SRCLR);
+    PORTB &= ~(1 << SRCLK);
+    PORTB &= ~(1 << RCLK);
+    PORTB |= (1 << SRCLR);
   while (1)
   {
-      PORTB &= ~(1 << PB0);  // High voltage
-      PORTB &= ~(1 << PB0);  // High voltage
-//      PORTB &= ~(1 << PB0);  // High voltage
-      PORTB |= (1 << PB0); // High Voltage
-//      adc_value = adc_read();
-//      OCR0B = adc_value >> 1;
-//      OCR0A = adc_value;
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
+      for (int i = 0; i < 8; ++i)
+      {
+          PORTB |= (1 << DATA);
+          PORTB |= (1 << SRCLK);
+          PORTB |= (1 << SRCLK);
+          PORTB &= ~(1 << SRCLK);
+
+          PORTB &= ~(1 << RCLK);
+      }
+
+      for (int j = 0; j < 8; ++j)
+          PORTB |= (1 << RCLK);m
+
+//      PORTB ^= (1 << DATA);
   }
 
   return 0;
