@@ -1,23 +1,24 @@
 
 #include <avr/interrupt.h>
-#include <avr/io.h>
+
 #include <stdint.h>
-//#include "pid.h"
+#include "vfd.h"
+#include <avr/io.h>
 
 #define RCLK PB2
 #define DATA PB0
 #define SRCLK PB1
 #define SRCLR PB4
 #define GRAD PB3
-
-// ----------------------------------------------------------------------------
-//              ------
-//ADC0/RES    -| -    |-  VCC
-//ADC3/PB3    -|      |-  PB2/SCK/ADC1
-//ADC2/PB4    -|      |-  PB1/MISO/OC0B
-//     GND    -|      |-  PB0/MOSI/OC0A
-//              ------
-// ----------------------------------------------------------------------------
+//
+//// ----------------------------------------------------------------------------
+////              ------
+////ADC0/RES    -| -    |-  VCC
+////ADC3/PB3    -|      |-  PB2/SCK/ADC1
+////ADC2/PB4    -|      |-  PB1/MISO/OC0B
+////     GND    -|      |-  PB0/MOSI/OC0A
+////              ------
+//// ----------------------------------------------------------------------------
 
 #define MAX_PWM 0x20
 
@@ -37,37 +38,40 @@ static inline void initTimer0(void)
   OCR0A = MAX_PWM;
 }
 
+
+
+
 int main(void)
 {
 
   // ---- Initialization ----
-
-  DDRB |= (1 << RCLK) | (1 << DATA) | (1 << SRCLK) | (1 << SRCLR) | (1 << GRAD);
+  vfd_init();
 
 //  initTimer0();
 //  sei();
+//
 
   // ---- Main Loop ----
-    PORTB &= ~(1 << SRCLR);
-    PORTB &= ~(1 << SRCLK);
-    PORTB &= ~(1 << RCLK);
-    PORTB |= (1 << SRCLR);
+
+//
   while (1)
   {
-      for (int i = 0; i < 8; ++i)
-      {
-          PORTB |= (1 << DATA);
-          PORTB |= (1 << SRCLK);
-          PORTB |= (1 << SRCLK);
-          PORTB &= ~(1 << SRCLK);
 
-          PORTB &= ~(1 << RCLK);
-      }
+//    vfd_write_word(0, 10);
+    vfd_write_word(1, 8);
+//    vfd_write_word(2, 10);
+    vfd_write_word(3, 9);
+//    vfd_write_word(4, 10);
+//    vfd_write_word(5, 10);
+//    vfd_write_word(6, 10);
+      vfd_write_special_character(0);
+//      vfd_write_special_character(1);
+//      vfd_write_special_character(2);
+//      vfd_write_special_character(3);
+//      vfd_write_special_character(4);
+//      vfd_write_special_character(5);
+//      vfd_write_special_character(11);
 
-      for (int j = 0; j < 8; ++j)
-          PORTB |= (1 << RCLK);m
-
-//      PORTB ^= (1 << DATA);
   }
 
   return 0;

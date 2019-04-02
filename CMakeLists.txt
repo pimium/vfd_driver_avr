@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 2.8)
 
 ### END TOOLCHAIN SETUP AREA #############################################
 # -DCMAKE_TOOLCHAIN_FILE=./generic-gcc-avr.cmake
-include(./generic-gcc-avr.cmake)
+#include(./generic-gcc-avr.cmake)
 
 ### TOOLCHAIN SETUP AREA #################################################
 # Set any variables used in the toolchain prior project() call. In that
@@ -149,7 +149,7 @@ add_definitions("-std=gnu99")
 ##########################################################################
 include_directories(
         .
-#        ssd1306xled
+        vfd
 #        hv5812
 #        ssd1306xled/print_3x7
 #        ssd1306xled/print_5x7
@@ -159,7 +159,7 @@ include_directories(
 )
 #include_directories(. ssd1306xled i2c_bitbang num2str)
 
-#add_subdirectory(ssd1306xled)
+add_subdirectory(vfd)
 #add_subdirectory(num2str)
 
 
@@ -176,10 +176,10 @@ add_avr_executable(
 
 ##################################################################################
 # add AVR library
-##################################################################################
+###################################################################################
 #add_avr_library(
-#   tm1637lib
-#        tm1637lib/tm1637.c tm1637lib/tm1637.h tm1637lib/tm1637font.h
+#        vfdlib
+#        vfd/vfd.c vfd/vfd.h
 #)
 
 ##################################################################################
@@ -192,7 +192,7 @@ add_avr_executable(
 
 target_link_libraries(
         ${PROJECT_NAME}-${AVR_MCU}.elf
-#        ssd1306xled-${AVR_MCU}
+        vfd-${AVR_MCU}
 #        num2str-${AVR_MCU}
 )
 # target_link_libraries(${PROJECT_NAME}-${AVR_MCU}.elf)
