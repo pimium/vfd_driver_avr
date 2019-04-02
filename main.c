@@ -1,17 +1,24 @@
 
 #include <avr/interrupt.h>
-#include <avr/io.h>
-#include <stdint.h>
-//#include "pid.h"
 
-// ----------------------------------------------------------------------------
-//              ------
-//ADC0/RES    -| -    |-  VCC
-//ADC3/PB3    -|      |-  PB2/SCK/ADC1
-//ADC2/PB4    -|      |-  PB1/MISO/OC0B
-//     GND    -|      |-  PB0/MOSI/OC0A
-//              ------
-// ----------------------------------------------------------------------------
+#include <stdint.h>
+#include "vfd.h"
+#include <avr/io.h>
+
+#define RCLK PB2
+#define DATA PB0
+#define SRCLK PB1
+#define SRCLR PB4
+#define GRAD PB3
+//
+//// ----------------------------------------------------------------------------
+////              ------
+////ADC0/RES    -| -    |-  VCC
+////ADC3/PB3    -|      |-  PB2/SCK/ADC1
+////ADC2/PB4    -|      |-  PB1/MISO/OC0B
+////     GND    -|      |-  PB0/MOSI/OC0A
+////              ------
+//// ----------------------------------------------------------------------------
 
 #define MAX_PWM 0x20
 
@@ -31,60 +38,40 @@ static inline void initTimer0(void)
   OCR0A = MAX_PWM;
 }
 
-//void adc_setup (void)
-//{
-//    // Set the ADC input to PB2/ADC1
-//    ADMUX |= (1 << MUX0);
-//    ADMUX |= (1 << ADLAR);
-//
-//    // Set the prescaler to clock/128 & enable ADC
-//    ADCSRA |= (1 << ADPS1) | (1 << ADPS0) | (1 << ADEN);
-//    OCR0B = MAX_PWM/2;
-//    OCR0A = MAX_PWM;
-//}
-//
-//int adc_read (void)
-//{
-//    // Start the conversion
-//    ADCSRA |= (1 << ADSC);
-//
-//    // Wait for it to finish
-//    while (ADCSRA & (1 << ADSC));
-//
-//    return ADCH;
-//}
+
+
 
 int main(void)
 {
 
   // ---- Initialization ----
+  vfd_init();
 
-  DDRB |= (1 << PB0) | (1 << PB1);
-
-  initTimer0();
-//  adc_setup();
-
-  sei();
+//  initTimer0();
+//  sei();
+//
 
   // ---- Main Loop ----
-//  int adc_value;
 
+//
   while (1)
   {
-      PORTB &= ~(1 << PB0);  // High voltage
-      PORTB &= ~(1 << PB0);  // High voltage
-//      PORTB &= ~(1 << PB0);  // High voltage
-      PORTB |= (1 << PB0); // High Voltage
-//      adc_value = adc_read();
-//      OCR0B = adc_value >> 1;
-//      OCR0A = adc_value;
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
-      PORTB |= (1 << PB0); // High Voltage
+
+//    vfd_write_word(0, 10);
+    vfd_write_word(1, 8);
+//    vfd_write_word(2, 10);
+    vfd_write_word(3, 9);
+//    vfd_write_word(4, 10);
+//    vfd_write_word(5, 10);
+//    vfd_write_word(6, 10);
+      vfd_write_special_character(0);
+//      vfd_write_special_character(1);
+//      vfd_write_special_character(2);
+//      vfd_write_special_character(3);
+//      vfd_write_special_character(4);
+//      vfd_write_special_character(5);
+//      vfd_write_special_character(11);
+
   }
 
   return 0;
