@@ -4,8 +4,8 @@
 #include <unity.h>
 
 #define REG_INIT_0 0x80
-#define REG_INIT_1 0x80
-#define REG_INIT_2 0x80
+#define REG_INIT_1 0x81
+#define REG_INIT_2 0x82
 
 /* sometimes you may want to get at local data in a module.
  * for example: If you plan to pass by reference, this could be useful
@@ -24,9 +24,9 @@ void test_InitFunction_dummy(void)
     uint8_t register_value[3];
     vfd_init();
     get_register_value(register_value);
-    TEST_ASSERT_EQUAL(REG_INIT_0, register_value[0]);
-    TEST_ASSERT_EQUAL(REG_INIT_1, register_value[1]);
-    TEST_ASSERT_EQUAL(REG_INIT_2, register_value[2]);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_1, register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_2, register_value[2]);
 }
 
 // 0 {0x21, 0x80}, // Glocke
@@ -173,57 +173,3 @@ void test_vfd_write_word_for_position_6(void)
     get_register_value(register_value);
     TEST_ASSERT_EQUAL(0x10, 0x10 & register_value[0]);
 }
-
-// void
-// test_FindFunction_WhichIsBroken_ShouldReturnZeroIfItemIsNotInList_WhichWorksEvenInOurBrokenCode(void)
-// {
-//   /* All of these should pass */
-//   TEST_ASSERT_EQUAL(0, FindFunction_WhichIsBroken(78));
-//   TEST_ASSERT_EQUAL(0, FindFunction_WhichIsBroken(2));
-//   TEST_ASSERT_EQUAL(0, FindFunction_WhichIsBroken(33));
-//   TEST_ASSERT_EQUAL(0, FindFunction_WhichIsBroken(999));
-//   TEST_ASSERT_EQUAL(0, FindFunction_WhichIsBroken(-1));
-// }
-
-// void
-// test_FindFunction_WhichIsBroken_ShouldReturnTheIndexForItemsInList_WhichWillFailBecauseOurFunctionUnderTestIsBroken(void)
-// {
-//   /* You should see this line fail in your test summary */
-//   TEST_ASSERT_EQUAL(1, FindFunction_WhichIsBroken(34));
-
-//   /* Notice the rest of these didn't get a chance to run because the line
-//   above failed.
-//    * Unit tests abort each test function on the first sign of trouble.
-//    * Then NEXT test function runs as normal. */
-//   TEST_ASSERT_EQUAL(8, FindFunction_WhichIsBroken(888));
-// }
-
-// void
-// test_FunctionWhichReturnsLocalVariable_ShouldReturnTheCurrentCounterValue(void)
-// {
-//     /* This should be true because setUp set this up for us before this test
-//     */
-//     TEST_ASSERT_EQUAL_HEX(Counter, FunctionWhichReturnsLocalVariable());
-
-//     /* This should be true because we can still change our answer */
-//     Counter = 0x1234;
-//     TEST_ASSERT_EQUAL_HEX(0x1234, FunctionWhichReturnsLocalVariable());
-// }
-
-// void
-// test_FunctionWhichReturnsLocalVariable_ShouldReturnTheCurrentCounterValueAgain(void)
-// {
-//     /* This should be true again because setup was rerun before this test
-//     (and after we changed it to 0x1234) */
-//     TEST_ASSERT_EQUAL_HEX(0x5a5a, FunctionWhichReturnsLocalVariable());
-// }
-
-// void
-// test_FunctionWhichReturnsLocalVariable_ShouldReturnCurrentCounter_ButFailsBecauseThisTestIsActuallyFlawed(void)
-// {
-//     /* Sometimes you get the test wrong.  When that happens, you get a
-//     failure too... and a quick look should tell
-//      * you what actually happened...which in this case was a failure to setup
-//      the initial condition. */
-//     TEST_ASSERT_EQUAL_HEX(Counter, FunctionWhichReturnsLocalVariable());
-// }
