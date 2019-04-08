@@ -3,6 +3,10 @@
 #include "vfd_test.h"
 #include <unity.h>
 
+#define REG_INIT_0 0x80
+#define REG_INIT_1 0x80
+#define REG_INIT_2 0x80
+
 /* sometimes you may want to get at local data in a module.
  * for example: If you plan to pass by reference, this could be useful
  * however, it should often be avoided */
@@ -10,7 +14,7 @@
 void setUp(void)
 {
     /* This is run before EACH TEST */
-    set_register_value(21, 22, 23);
+    set_register_value(REG_INIT_0, REG_INIT_1, REG_INIT_2);
 }
 
 void tearDown(void) {}
@@ -20,9 +24,44 @@ void test_InitFunction_dummy(void)
     uint8_t register_value[3];
     vfd_init();
     get_register_value(register_value);
-    TEST_ASSERT_EQUAL(21, register_value[0]);
-    TEST_ASSERT_EQUAL(22, register_value[1]);
-    TEST_ASSERT_EQUAL(23, register_value[2]);
+    TEST_ASSERT_EQUAL(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL(REG_INIT_1, register_value[1]);
+    TEST_ASSERT_EQUAL(REG_INIT_2, register_value[2]);
+}
+
+// 0 {0x21, 0x80}, // Glocke
+void test_vfd_write_special_character_Glocke(void)
+{
+    uint8_t register_value[3];
+    vfd_write_special_character(0);
+    get_register_value(register_value);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_1, register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8(0x80 | 0x20, (0x80 | 0x20) & register_value[2]);
+}
+
+// 5 {0x10, 0x02}, // Auto
+void test_vfd_write_special_character_Auto(void)
+{
+    uint8_t register_value[3];
+    vfd_write_special_character(5);
+    get_register_value(register_value);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(0x02, register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8((REG_INIT_2 | 0x04), (REG_INIT_2 | 0x04) & register_value[2]);
+    
+}
+
+// 8 {0x24, 0x02}, // Kolben
+void test_vfd_write_special_character_Kolben(void)
+{
+    uint8_t register_value[3];
+    vfd_write_special_character(8);
+    get_register_value(register_value);
+    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8((REG_INIT_1 | 0x40), (REG_INIT_1 | 0x40) & register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8(0x02, 0x02 | register_value[2]);
+    
 }
 
 // write the decimal 0 to the display: {0x80, 0x6D}, // 0
