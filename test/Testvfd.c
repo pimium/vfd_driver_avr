@@ -35,8 +35,8 @@ void test_vfd_write_special_character_Glocke(void)
     uint8_t register_value[3];
     vfd_write_special_character(0);
     get_register_value(register_value);
-    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
-    TEST_ASSERT_EQUAL_HEX8(REG_INIT_1, register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8(0x00, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(0x00, register_value[1]);
     TEST_ASSERT_EQUAL_HEX8(0x80 | 0x20, (0x80 | 0x20) & register_value[2]);
 }
 
@@ -46,10 +46,9 @@ void test_vfd_write_special_character_Auto(void)
     uint8_t register_value[3];
     vfd_write_special_character(5);
     get_register_value(register_value);
-    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(0x00, register_value[0]);
     TEST_ASSERT_EQUAL_HEX8(0x02, register_value[1]);
-    TEST_ASSERT_EQUAL_HEX8((REG_INIT_2 | 0x04), (REG_INIT_2 | 0x04) & register_value[2]);
-    
+    TEST_ASSERT_EQUAL_HEX8(0x04, 0x04 & register_value[2]);
 }
 
 // 8 {0x24, 0x02}, // Kolben
@@ -58,10 +57,9 @@ void test_vfd_write_special_character_Kolben(void)
     uint8_t register_value[3];
     vfd_write_special_character(8);
     get_register_value(register_value);
-    TEST_ASSERT_EQUAL_HEX8(REG_INIT_0, register_value[0]);
-    TEST_ASSERT_EQUAL_HEX8((REG_INIT_1 | 0x40), (REG_INIT_1 | 0x40) & register_value[1]);
+    TEST_ASSERT_EQUAL_HEX8(0x00, register_value[0]);
+    TEST_ASSERT_EQUAL_HEX8(0x40, 0x40 & register_value[1]);
     TEST_ASSERT_EQUAL_HEX8(0x02, 0x02 | register_value[2]);
-    
 }
 
 // write the decimal 0 to the display: {0x80, 0x6D}, // 0

@@ -10,7 +10,7 @@
 
 static uint8_t register_value[3] = {0, 0, 0};
 
-const uint8_t decimal_list[][2] PROGMEM = {
+const uint8_t decimal_list[][2] = {
     {0x80, 0x6D}, // 0
     {0x00, 0x28}, // 1
     {0x20, 0x65}, // 2
@@ -99,8 +99,8 @@ void vfd_write_word(uint8_t pos, uint8_t value)
     uint8_t position_value = position_list[pos][1];
     uint8_t position = position_list[pos][0];
 
-    register_value[0] = pgm_read_byte(&(decimal_list[value][1]));
-    register_value[1] = pgm_read_byte(&(decimal_list[value][0]));
+    register_value[0] = ((decimal_list[value][1]));
+    register_value[1] = ((decimal_list[value][0]));
     register_value[2] = 0;
     register_value[position] = register_value[position] | position_value;
 
@@ -115,6 +115,10 @@ void vfd_write_word(uint8_t pos, uint8_t value)
 //
 void vfd_write_special_character(uint8_t symb)
 {
+    register_value[0] = 0;
+    register_value[1] = 0;
+    register_value[2] = 0;
+
     uint8_t filament_byte = symbole_list[symb][0];
     uint8_t symb_value = symbole_list[symb][1];
 

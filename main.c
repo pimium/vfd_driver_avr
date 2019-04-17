@@ -38,12 +38,12 @@ int main(void)
 
         //    vfd_write_word(0, 10);
         vfd_write_word(1, 8);
-        //    vfd_write_word(2, 10);
+        vfd_write_word(2, 1);
         vfd_write_word(3, 9);
         //    vfd_write_word(4, 10);
         //    vfd_write_word(5, 10);
         //    vfd_write_word(6, 10);
-        vfd_write_special_character(0);
+        vfd_write_special_character(2);
         //      vfd_write_special_character(1);
         //      vfd_write_special_character(2);
         //      vfd_write_special_character(3);
