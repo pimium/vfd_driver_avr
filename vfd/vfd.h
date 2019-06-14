@@ -12,6 +12,12 @@
 #define SRCLK PB1
 #define SRCLR PB4
 #define GRAD PB3
+#ifndef VFD_PORT
+#define VFD_PORT PORTB
+#endif
+#ifndef VFD_DDR
+#define VFD_DDR DDRB
+#endif
 
 // ----------------------------------------------------------------------------
 //              ------
@@ -22,8 +28,11 @@
 //              ------
 // ----------------------------------------------------------------------------
 void vfd_init(void);
-void vfd_write_byte(uint8_t byte);
-void vfd_write_word(uint8_t pos, uint8_t value);
+// void vfd_write_byte(uint8_t byte);
 void vfd_write_special_character(uint8_t pos);
-
+uint8_t vfd_write_word(uint8_t pos, uint8_t value);
+void vfd_blank(void);
+uint16_t vfd_convert_bcd(uint16_t binaryInput);
+// void vfd_write_special_character(uint8_t posit, uint8_t filament, uint8_t
+// symb);
 #endif // SMPS_VFD_H

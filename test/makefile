@@ -65,7 +65,7 @@ test_runners/Testvfd_Runner.c: Testvfd.c
 #	ruby $(UNITY_ROOT)/auto/generate_test_runner.rb Testvfd2.c test_runners/Testvfd2_Runner.c
 
 clean:
-	$(CLEANUP) $(TARGET1) $(TARGET2)
+	$(CLEANUP) $(TARGET1) $(TARGET2) test_runners/*
 
 ci: CFLAGS += -Werror
 ci: default
